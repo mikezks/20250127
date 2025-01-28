@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Injector, OnInit, runInInjectionContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FlightCardComponent } from '../flight-card/flight-card.component';
@@ -12,7 +12,10 @@ import { Flight, FlightService } from '@flight-demo/tickets/domain';
   styleUrls: ['./flight-search.component.css'],
   imports: [CommonModule, FormsModule, CityPipe, FlightCardComponent],
 })
-export class FlightSearchComponent {
+export class FlightSearchComponent implements OnInit {
+  private injector = inject(Injector);
+  private flightService = inject(FlightService);
+
   from = 'London';
   to = 'New York';
   flights: Array<Flight> = [];
@@ -23,7 +26,10 @@ export class FlightSearchComponent {
     5: true,
   };
 
-  private flightService = inject(FlightService);
+  ngOnInit(): void {
+    const flightService = runInInjectionContext(this.injector, () => inject(FlightService));
+    flightService.find('London', '').subscribe(console.log);
+  }
 
   search(): void {
     if (!this.from || !this.to) {
