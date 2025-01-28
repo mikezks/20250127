@@ -5,21 +5,21 @@
 <form>
   <div class="form-group">
     <label>From:</label>
-    <input [ngModel]="filter.from()" (ngModelChange)="updateFilter({ from: $event })"  name="from" class="form-control" />
+    <input [ngModel]="store.filter.from()" (ngModelChange)="store.updateFilter({ from: $event })"  name="from" class="form-control" />
   </div>
   <div class="form-group">
     <label>To:</label>
-    <input [ngModel]="filter.to()" (ngModelChange)="updateFilter({ to: $event })" name="to" class="form-control" />
+    <input [ngModel]="store.filter.to()" (ngModelChange)="store.updateFilter({ to: $event })" name="to" class="form-control" />
   </div>
 
-  <div class="form-group">
-    <button (click)="search()" class="btn btn-default">Search</button>
-  </div>
+  <!-- <div class="form-group">
+    <button (click)="store.loadFlights()" class="btn btn-default">Search</button>
+  </div> -->
 </form>
 
 <div class="row">
-  <div *ngFor="let f of flights()" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-    <app-flight-card [item]="f" [selected]="basket()[f.id]" (selectedChange)="updateBasket(f.id, $event)">
+  <div *ngFor="let f of store.flights()" class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+    <app-flight-card [item]="f" [selected]="store.basket()[f.id]" (selectedChange)="store.updateBasket(f.id, $event)">
       <p class="middle"><i>Delays are possible!</i></p>
       <p class="bottom"><small>Statement without guarantee!</small></p>
     </app-flight-card>
@@ -29,5 +29,5 @@
 <p>&nbsp;</p>
 
 <div>
-  <pre>{{ basket() | json }}</pre>
+  <pre>{{ store.basket() | json }}</pre>
 </div>

@@ -1,7 +1,10 @@
-import { patchState, signalStore, withComputed, withMethods, withState} from '@ngrx/signals';
+import { patchState, signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { concatLatestFrom, tapResponse } from '@ngrx/operators';
 import { Flight } from '../entities/flight';
 import { computed, inject } from '@angular/core';
 import { FlightService } from '../infrastructure/flight.service';
+import { pipe, switchMap } from 'rxjs';
 
 
 export const BookingStore = signalStore(
@@ -52,6 +55,16 @@ export const BookingStore = signalStore(
       ).subscribe(
         flights => store.setFlights(flights)
       );
-    }
-  }))
+    },
+    rxLoadFlights: rxMethod<{ from: string, to: string }>(pipe(
+      switchMap(filter => flightService.find(filter.from, filter.to)),
+      tapResponse(
+        (flights: Flight[]) => store.setFlights(flights),
+        err => console.error(err)
+      )
+    ))
+  })),
+  withHooks({
+    onInit: store => store.rxLoadFlights(store.filter)
+  })
 );
