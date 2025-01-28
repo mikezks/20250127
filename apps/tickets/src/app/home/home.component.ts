@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { injectFullname } from '../shared/util-config/config.provider';
 
 @Component({
   selector: 'app-home',
@@ -8,4 +9,6 @@ import { CommonModule } from '@angular/common';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
-export class HomeComponent {}
+export class HomeComponent {
+  fullname = injectFullname();
+}

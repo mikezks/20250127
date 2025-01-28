@@ -9,6 +9,7 @@ import {
 } from '@angular/router';
 import { AppComponent } from './app/app.component';
 import { APP_ROUTES } from './app/app.routes';
+import { provideConfigState } from './app/shared/util-config/config.provider';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -18,5 +19,6 @@ bootstrapApplication(AppComponent, {
       // withPreloading(PreloadAllModules),
     ),
     importProvidersFrom(MatDialogModule),
+    provideConfigState('./config.state.json')
   ],
 });
